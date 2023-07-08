@@ -15,12 +15,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LocalProcessor {
+
     private String processorName;
     private Long period = 10_000_000_000_000L;
     private String processorVersion;
     private Integer valueOfCheap;
-    private Scanner informationscanner;
-    static List<String> stringArrayList;
+    private Scanner informationScanner;
+    private static List<String> stringArrayList;
 
     public LocalProcessor(String processorName, Long period, String processorVersion, Integer valueOfCheap,
                           Scanner informationscanner, LinkedList<String> stringArrayList) {
@@ -28,7 +29,7 @@ public class LocalProcessor {
         this.period = period;
         this.processorVersion = processorVersion;
         this.valueOfCheap = valueOfCheap;
-        this.informationscanner = informationscanner;
+        this.informationScanner = informationscanner;
         this.stringArrayList = stringArrayList;
     }
 
@@ -53,10 +54,17 @@ public class LocalProcessor {
 
     @ReadFullProcessorNameAnnotation
     public void readFullProcessorName(File file) throws FileNotFoundException {
-            informationscanner = new Scanner(file);
-            while (informationscanner.hasNext()) {
-                processorVersion+= informationscanner.nextLine();
+        try {
+            informationScanner = new Scanner(file);
+            while (informationScanner.hasNext()) {
+                processorVersion += informationScanner.nextLine();
             }
-            informationscanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (informationScanner != null) {
+                informationScanner.close();
+            }
+        }
     }
 }
